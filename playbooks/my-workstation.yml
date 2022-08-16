@@ -6,6 +6,8 @@
       community.general.pacman:
         update_cache: true
 
+# install libvirt
+- import_playbook: libvirt.yml
 
 - name: "Install main packages and extras"
   hosts: workstation
@@ -92,7 +94,6 @@
             validate: "visudo -cf %s"
 
           # END BLOCK
-
 
 # code block stolen from Jeff Novick - Sectigo
 - hosts: workstation
