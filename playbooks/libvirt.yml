@@ -3,7 +3,6 @@
 - hosts: workstation
   remote_user: root
   vars:
-    _packages_libvirt: true
     packages_libvirt:
       - libvirt
       - bridge-utils
@@ -15,25 +14,28 @@
       - virt-manager
 
   tasks:
-    - name: "Remove iptables"
-      community.general.pacman:
-        name: "{{ item }}"
-        state: absent
-      with_items:
-        - "{{ packages_remove }}"
-
-    - name: "Include Config Management Task"
-      community.general.pacman:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - "{{ packages_libvirt }}"
-        - "{{ package_virt_manager }}"
-      when: _packages_libvirt == true
-
-    - name: "Systemctl services"
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-        enabled: yes
-      with_items:
-        - libvirtd
+    - name: "Packages block"
+      block:
+        - name: "Remove iptables"
+          community.general.pacman:
+            name: "{{ item }}"
+            state: absent
+          with_items:
+            - "{{ packages_remove }}"
+    
+        - name: "Include Config Management Task"
+          community.general.pacman:
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - "{{ packages_libvirt }}"
+            - "{{ package_virt_manager }}"
+          when: _packages_libvirt == true
+    
+        - name: "Systemctl services"
+          ansible.builtin.systemd:
+            name: "{{ item }}"
+            enabled: yes
+          with_items:
+            - libvirtd
+    when: packages_libvirt_install == true

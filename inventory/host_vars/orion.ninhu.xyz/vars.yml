@@ -9,7 +9,8 @@ docker_user: "{{ user_name }}"
 workstation_user: "{{ user_name }}"
 
 # variables for oh-my-zsh
-_zsh_clone_plugin: true
+install_oh_my_zsh: true
+zsh_clone_plugin: true
 zsh_plugins:
   - name: "Syntax-Highlighting"
     repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
@@ -21,7 +22,7 @@ zsh_plugins:
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
     dest: "zsh-autosuggestions"
 
-_packages_gui: true
+packages_gui: true
 display_manager: gdm
 packages_gui:
   - xorg
@@ -45,7 +46,7 @@ extra_packages:
   - zsh
   - bat
 
-_install_config_management_tools: true
+config_management_tools_install: true
 packages_config_management:
   - terraform
   - kubectl
@@ -70,7 +71,7 @@ packages_config_management:
   - python-passlib
   - python-jmespath
 
-_yay_packages: true
+yay_packages_install: true
 yay_packages:
   - spotify
   - joplin-appimage
@@ -83,5 +84,5 @@ yay_packages:
 pip_packages:
   - pre-commit
 
-_packages_libvirt: true
+packages_libvirt_install: true
 packages_libvirt:
