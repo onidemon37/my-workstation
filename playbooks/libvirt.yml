@@ -16,7 +16,7 @@
   tasks:
     - name: "Packages block"
       block:
-        - name: "Remove iptables"
+        - name: "Remove packages"
           community.general.pacman:
             name: "{{ item }}"
             state: absent
