@@ -154,3 +154,6 @@
       with_items:
         - "{{ yay_packages }}"
       when: _yay_packages == true
+
+# clone oh-my-zsh
+- import_playbook: oh-my-zsh.yml
