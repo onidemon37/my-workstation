@@ -1,6 +1,6 @@
 ---
-user_name: "onidemon"
-user_comments: "onidemon"
+user_name: ""
+user_comments: ""
 user_shell: "/usr/bin/zsh"
 user_groups: ["users"]
 user_keys: "files/public_keys/id_rsa.pub"
@@ -69,3 +69,6 @@ yay_packages:
 
 pip_packages:
   - pre-commit
+
+_packages_libvirt: true
+packages_libvirt:
