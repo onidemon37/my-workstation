@@ -32,7 +32,7 @@
             state: present
           with_items:
             - "{{ packages_gui }}"
-          when: _packages_gui == true
+          when: packages_gui_install == true
 
         - name: "Include Config Management Task"
           community.general.pacman:
@@ -40,7 +40,7 @@
             state: present
           with_items:
             - "{{ packages_config_management }}"
-          when: _install_config_management_tools == true
+          when: config_management_tools_install == true
 
         - name: "Systemctl services"
           ansible.builtin.systemd:
@@ -153,4 +153,7 @@
         name: "{{ item }}"
       with_items:
         - "{{ yay_packages }}"
-      when: _yay_packages == true
+      when: yay_packages_install == true
+
+# clone oh-my-zsh
+- import_playbook: oh-my-zsh.yml
