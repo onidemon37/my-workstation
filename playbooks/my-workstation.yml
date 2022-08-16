@@ -92,3 +92,64 @@
             validate: "visudo -cf %s"
 
           # END BLOCK
+
+
+# code block stolen from Jeff Novick - Sectigo
+- hosts: workstation
+  remote_user: "{{ workstation_user }}"
+  become: no
+  tags: yay
+  tasks:
+    - name: "Check if yay exists on system"
+      stat:
+        path: /usr/bin/yay
+      register: yay
+
+    # start yay block
+    - name: "Yay Install if needed"
+      block:
+        - name: "Install Go (to build yay)"
+          become: true
+          become_method: sudo
+          community.general.pacman:
+            name:
+              - go
+              - git
+              - base-devel
+            state: present
+
+        - name: "Make Yay build directory"
+          ansible.builtin.file:
+            path: ~/yay
+            state: directory
+
+        - name: "Fetch Yay"
+          ansible.builtin.get_url:
+            url: https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=yay
+            dest: ~/yay/PKGBUILD
+
+        - name: "Build yay"
+          ansible.builtin.command: chdir=~/yay makepkg -f
+
+        - name: "Get the package name (version numbers will vary over time)."
+          ansible.builtin.find:
+            paths: ~/yay
+            patterns: "yay-*.pkg.tar.zst"
+          register: yay_package
+
+        - name: "Install yay finally"
+          become: true
+          become_method: sudo
+          community.general.pacman:
+            name: "{{ yay_package['files'][0]['path'] }}"
+            state: present
+      when: not yay.stat.exists
+      # END YAY Block
+
+    - name: "Install packages using yay"
+      kewlfft.aur.aur:
+        use: yay
+        name: "{{ item }}"
+      with_items:
+        - "{{ yay_packages }}"
+      when: _yay_packages == true
