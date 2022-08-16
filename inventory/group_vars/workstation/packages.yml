@@ -1,0 +1,27 @@
+---
+packages_remove: ""
+packages_install:
+  - linux-firmware
+  - base-devel
+  - sudo
+  - unzip
+  - rsync
+  - tar
+  - findutils
+  - traceroute
+  - nmap
+  - wget
+  - curl
+  - ipcalc
+  - ntp
+  - nfs-utils
+  - tcpdump
+  - sysstat
+  - procps-ng
+  - hashcat
+  - gnupg
+  - lsof
+  - openssh
+  - mlocate
+  - git
+  - python-pip

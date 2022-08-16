@@ -1,0 +1,155 @@
+---
+- hosts: workstation
+  remote_user: root
+  tasks:
+    - name: "Run the equivalent of 'pacman -Sy' as a separate step"
+      community.general.pacman:
+        update_cache: true
+
+
+- name: "Install main packages and extras"
+  hosts: workstation
+  remote_user: root
+  tags: install_packages
+
+  tasks:
+    - name: "Packages block"
+      block:
+        # START BLOCK PACKAGES
+        - name: "Install Needed and Extra packages"
+          ansible.builtin.package:
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - "{{ packages_install }}"
+            - "{{ extra_packages }}"
+
+        - name: "Install Gui"
+          community.general.pacman:
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - "{{ packages_gui }}"
+          when: _packages_gui == true
+
+        - name: "Include Config Management Task"
+          community.general.pacman:
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - "{{ packages_config_management }}"
+          when: _install_config_management_tools == true
+
+        - name: "Systemctl services"
+          ansible.builtin.systemd:
+            name: "{{ display_manager }}"
+            enabled: true
+          when: display_manager is defined
+
+    # END BLOCK PACKAGES
+
+    - name: "Systemctl services"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+      with_items:
+        - sshd
+        - bluetooth
+
+- name: "Configure users on all nodes"
+  hosts: workstation
+  remote_user: root
+  tags: addusers
+
+  tasks:
+    - name: "Users block"
+      block:
+        # START BLOCK
+        - name: "Add Users"
+          ansible.builtin.user:
+            name: "{{ user_name }}"
+            createhome: true
+            comment: "{{ user_comments }}"
+            shell: "{{ user_shell }}"
+            groups: "{{ user_groups }}"
+
+        - name: create .ssh folder
+          ansible.builtin.file:
+            path: "/home/{{ user_name }}/.ssh"
+            owner: "{{ user_name }}"
+            state: directory
+
+        - name: set ansible user id_rsa key
+          ansible.builtin.authorized_key:
+            user: "{{ user_name }}"
+            key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+            state: present
+
+        - name: allow Ansible User to have passwordless sudo
+          ansible.builtin.lineinfile:
+            dest: /etc/sudoers
+            line: '"{{ user_name }}" ALL=(ALL) NOPASSWD: ALL'
+            validate: "visudo -cf %s"
+
+          # END BLOCK
+
+
+# code block stolen from Jeff Novick - Sectigo
+- hosts: workstation
+  remote_user: "{{ workstation_user }}"
+  become: no
+  tags: yay
+  tasks:
+    - name: "Check if yay exists on system"
+      stat:
+        path: /usr/bin/yay
+      register: yay
+
+    # start yay block
+    - name: "Yay Install if needed"
+      block:
+        - name: "Install Go (to build yay)"
+          become: true
+          become_method: sudo
+          community.general.pacman:
+            name:
+              - go
+              - git
+              - base-devel
+            state: present
+
+        - name: "Make Yay build directory"
+          ansible.builtin.file:
+            path: ~/yay
+            state: directory
+
+        - name: "Fetch Yay"
+          ansible.builtin.get_url:
+            url: https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=yay
+            dest: ~/yay/PKGBUILD
+
+        - name: "Build yay"
+          ansible.builtin.command: chdir=~/yay makepkg -f
+
+        - name: "Get the package name (version numbers will vary over time)."
+          ansible.builtin.find:
+            paths: ~/yay
+            patterns: "yay-*.pkg.tar.zst"
+          register: yay_package
+
+        - name: "Install yay finally"
+          become: true
+          become_method: sudo
+          community.general.pacman:
+            name: "{{ yay_package['files'][0]['path'] }}"
+            state: present
+      when: not yay.stat.exists
+      # END YAY Block
+
+    - name: "Install packages using yay"
+      kewlfft.aur.aur:
+        use: yay
+        name: "{{ item }}"
+      with_items:
+        - "{{ yay_packages }}"
+      when: _yay_packages == true
