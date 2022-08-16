@@ -1,0 +1,71 @@
+---
+user_name: "onidemon"
+user_comments: "onidemon"
+user_shell: "/usr/bin/zsh"
+user_groups: ["users"]
+user_keys: "files/public_keys/id_rsa.pub"
+
+docker_user: "{{ user_name }}"
+workstation_user: "{{ user_name }}"
+
+_packages_gui: true
+display_manager: gdm
+packages_gui:
+  - xorg
+  - gnome
+  - gnome-extra
+  - gdm
+
+extra_packages:
+  - alacritty
+  - filezilla
+  - docker
+  - docker-compose
+  - chezmoi
+  - thunderbird
+  - pwgen
+  - aws-cli
+  - keychain
+  - btop
+  - tmux
+  - neovim
+  - zsh
+  - bat
+
+_install_config_management_tools: true
+packages_config_management:
+  - terraform
+  - kubectl
+  - kubectx
+  - kustomize
+  - helm
+  - sops
+  - jq
+  - minikube
+  - fluxctl
+  - packer
+  - age
+  - vagrant
+  - ansible
+  - molecule
+  - ansible-lint
+  - molecule-vagrant
+  - yamllint
+  - python-psycopg2
+  - python-pytest-testinfra
+  - python-netaddr
+  - python-passlib
+  - python-jmespath
+
+_yay_packages: true
+yay_packages:
+  - spotify
+  - joplin-appimage
+  - aur/lens-bin
+  - aur/go-task
+  - visual-studio-code-bin
+  - brave-bin
+  - discord
+
+pip_packages:
+  - pre-commit
