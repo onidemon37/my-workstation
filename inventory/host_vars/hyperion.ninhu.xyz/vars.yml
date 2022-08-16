@@ -22,7 +22,7 @@ zsh_plugins:
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
     dest: "zsh-autosuggestions"
 
-packages_gui: true
+packages_gui_install: true
 display_manager: gdm
 packages_gui:
   - xorg
