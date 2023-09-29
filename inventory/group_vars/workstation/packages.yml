@@ -25,3 +25,6 @@ packages_install:
   - mlocate
   - git
   - python-pip
+  - pigz
+  - iftop
+  - axel

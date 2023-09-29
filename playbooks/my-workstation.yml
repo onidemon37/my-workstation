@@ -1,4 +1,11 @@
 ---
+- name: install python
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Install Python, if needed.
+      raw: test -e /usr/bin/python || (pacman -Sy && pacman -S python)
+
 - hosts: workstation
   remote_user: root
   tasks:

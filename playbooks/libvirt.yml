@@ -38,4 +38,4 @@
             enabled: yes
           with_items:
             - libvirtd
-    when: packages_libvirt_install == true
+      when: packages_libvirt_install == true

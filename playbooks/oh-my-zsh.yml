@@ -50,4 +50,4 @@
             - "{{ zsh_plugins }}"
           when: zsh_clone_plugin == true
 
-    when: install_oh_my_zsh == true
+      when: install_oh_my_zsh == true
