@@ -12,7 +12,7 @@
 
   tasks:
     - name: "oh-my-zsh config"
-      block: 
+      block:
         - name: "Install dependency packages"
           ansible.builtin.package:
             name: "{{ item }}"

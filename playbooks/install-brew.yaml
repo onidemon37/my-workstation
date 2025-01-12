@@ -1,0 +1,55 @@
+---
+- name: Install Homebrew on Debian-based systems
+  hosts: all
+  become: false
+  remote_user: "oni"
+  #remote_user: "{{ users[0].name }}"
+  tasks:
+    - name: Install dependencies for Homebrew
+      ansible.builtin.apt:
+        name:
+          - build-essential
+          - curl
+          - file
+          - git
+        state: present
+        update_cache: yes
+      become: true
+
+    - name: Include brew tasks
+      block:
+        - name: Get remote username
+          ansible.builtin.command: whoami
+          register: remote_user
+          changed_when: false
+
+        - name: Install Homebrew on Debian family systems
+          ansible.builtin.assert:
+            that:
+              - ansible_facts['os_family'] == 'Debian'
+            fail_msg: "This playbook only supports Debian-based systems."
+
+        - name: Check if Homebrew is already installed
+          ansible.builtin.command: which brew
+          register: brew_check
+          ignore_errors: true
+          changed_when: false
+
+        - name: Install Homebrew on Linux
+          ansible.builtin.shell: |
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          environment:
+            NONINTERACTIVE: true
+            HOME: "/home/{{ users[0].name }}"
+          when: brew_check.rc != 0
+
+        - name: Add Homebrew to PATH
+          ansible.builtin.lineinfile:
+            path: "/home/{{ users[0].name }}/.profile"
+            line: 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+            state: present
+      tags: brew
+      become: false
+      become_user: "{{ users[0].name }}"
+
+- import_playbook: install-k8s.yaml

@@ -1,12 +1,19 @@
 ---
-user_name: ""
-user_comments: ""
-user_shell: "/usr/bin/zsh"
-user_groups: ["users"]
-user_keys: "files/public_keys/id_rsa.pub"
-
-docker_user: "{{ user_name }}"
-workstation_user: "{{ user_name }}"
+remote_user: "oni"
+users:
+  - name: oni
+    comments: "Oni the Admin"
+    shell: "/usr/bin/zsh"
+    groups: ["wheel", "docker"]
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBzHbM48YR8ONfq4CA9L4iIV3kJI0oGVp2Nh9oWD/80t edino-moniz@edino-moniz-hp-elitebook-860-linux"
+  #- name: bob
+  #  comments: "Bob the Developer"
+  #  shell: /bin/bash
+  #  groups: ["developers"]
+  #
+additional_groups:
+  - wheel
+  - docker
 
 # variables for oh-my-zsh
 install_oh_my_zsh: true
@@ -30,46 +37,8 @@ packages_gui:
   - gnome-extra
   - gdm
 
-extra_packages:
-  - alacritty
-  - filezilla
-  - docker
-  - docker-compose
-  - chezmoi
-  - thunderbird
-  - pwgen
-  - aws-cli
-  - keychain
-  - btop
-  - tmux
-  - neovim
-  - zsh
-  - bat
-
 config_management_tools_install: true
 packages_config_management:
-  - terraform
-  - kubectl
-  - kubectx
-  - kustomize
-  - helm
-  - sops
-  - jq
-  - minikube
-  - fluxctl
-  - packer
-  - age
-  - vagrant
-  - ansible
-  - molecule
-  - ansible-lint
-  - molecule-vagrant
-  - yamllint
-  - python-psycopg2
-  - python-pytest-testinfra
-  - python-netaddr
-  - python-passlib
-  - python-jmespath
 
 yay_packages_install: true
 yay_packages:

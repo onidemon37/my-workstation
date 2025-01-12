@@ -22,7 +22,7 @@
             state: absent
           with_items:
             - "{{ packages_remove }}"
-    
+
         - name: "Include Config Management Task"
           community.general.pacman:
             name: "{{ item }}"
@@ -31,7 +31,7 @@
             - "{{ packages_libvirt }}"
             - "{{ package_virt_manager }}"
           when: _packages_libvirt == true
-    
+
         - name: "Systemctl services"
           ansible.builtin.systemd:
             name: "{{ item }}"
