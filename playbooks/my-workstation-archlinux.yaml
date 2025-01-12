@@ -14,7 +14,7 @@
         update_cache: true
 
 # install libvirt
-- import_playbook: libvirt.yml
+- import_playbook: libvirt.yaml
 
 - name: "Install main packages and extras"
   hosts: workstation
@@ -163,4 +163,4 @@
       when: yay_packages_install == true
 
 # clone oh-my-zsh
-- import_playbook: oh-my-zsh.yml
+- import_playbook: oh-my-zsh.yaml

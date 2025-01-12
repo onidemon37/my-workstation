@@ -1,0 +1,18 @@
+---
+- name: Install Homebrew on Debian-based systems
+  hosts: all
+  become: true
+  remote_user: "{{ users[0].name }}"
+  tasks:
+    - name: Install k8s-tools
+      block:
+        - name: Install Homebrew packages "{{ item }}" #(Helm, kubectl, bubectx)
+          homebrew:
+            name: "{{ item }}"
+            state: present
+          loop:
+            - "{{ brew_packages }}"
+          environment:
+            PATH: /home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}
+          become: no
+      tags: k8s

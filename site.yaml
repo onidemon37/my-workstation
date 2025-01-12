@@ -1,0 +1,22 @@
+---
+- name: Install Homebrew on Debian family systems
+  hosts: all
+  remote_user: root
+  #become: true
+  gather_facts: true
+  tasks:
+    - name: Include Arch Linux playbook
+      ansible.builtin.include_tasks: playbooks/my-workstation-archlinux.yaml
+      when: ansible_distribution == "Archlinux"
+
+    - name: Include Debian playbook
+      ansible.builtin.include_tasks: playbooks/my-workstation-debian.yaml
+      when: ansible_distribution == "Debian"
+
+- import_playbook: ./playbooks/install-brew.yaml
+  when: ansible_distribution == "Debian"
+## Install oh-my-zsh
+##- import_playbook: ./playbooks/oh-my-zsh.yaml
+
+# install libvirt
+##- import_playbook: ./playbooks/libvirt.yaml

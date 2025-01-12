@@ -1,21 +1,21 @@
 ---
-ci:
-  # format compatible with commitlint
-  autoupdate_commit_msg: "chore: pre-commit autoupdate"
-  autoupdate_schedule: weekly
-  autofix_commit_msg: |
-    chore: auto fixes from pre-commit.com hooks
-    for more information, see https://pre-commit.ci
-  skip:
-    # https://github.com/pre-commit-ci/issues/issues/55
-    - pip-compile
-    - pip-compile-upgrade
-default_language_version:
-  python: python3.10.5
-exclude: >
-  (?x)^(
-    examples/broken/yaml-with-tabs/invalid-due-tabs.yaml
-  )$
+#ci:
+#  # format compatible with commitlint
+#  autoupdate_commit_msg: "chore: pre-commit autoupdate"
+#  autoupdate_schedule: weekly
+#  autofix_commit_msg: |
+#    chore: auto fixes from pre-commit.com hooks
+#    for more information, see https://pre-commit.ci
+#  skip:
+#    # https://github.com/pre-commit-ci/issues/issues/55
+#    - pip-compile
+#    - pip-compile-upgrade
+#default_language_version:
+#  python: python3.10.5
+#exclude: >
+#  (?x)^(
+#    examples/broken/yaml-with-tabs/invalid-due-tabs.yaml
+#  )$
 
 repos:
   - repo: https://github.com/pre-commit/mirrors-prettier
@@ -31,15 +31,25 @@ repos:
     hooks:
       - id: black
         language_version: python3
-  - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.17.1
-    hooks:
-      - id: check-github-workflows
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: fix-byte-order-marker
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
+#  - repo: https://github.com/adrienverge/yamllint.git
+#    rev: v1.28.0
+#    hooks:
+#      - id: yamllint
+#        files: \.(yml|yaml)$
+#        args: ["-c", ".yamllint.yml"]
+#  - repo: https://github.com/ansible/ansible-lint
+#    rev: v6.20.0
+#    hooks:
+#      - id: ansible-lint
+#        name: Ansible Lint
+#        entry: ansible-lint
+#        language: python
+#        files: \.(yml|yaml)$

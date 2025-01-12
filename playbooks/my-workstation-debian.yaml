@@ -1,0 +1,67 @@
+---
+- name: Include vars
+  include_vars:
+    dir: ../vars/
+    files_matching:
+      - debian.yaml
+      - sectigo.yaml
+
+- name: "Install base packages"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "{{ dependency }}"
+    - "{{ extra_packages }}"
+
+- name: Create groups
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ additional_groups }}"
+
+- name: Add users block
+  block:
+    - name: Add users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        uid: "{{ user.uid | default(omit) }}"
+        comment: "{{ user.name | default(omit) }}"
+        shell: "{{ item.shell | default('/bin/bash')}}"
+        groups: "{{ item.groups | default([]) }}"
+        createhome: true
+        append: yes
+      loop: "{{ users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: create .ssh folder
+      ansible.builtin.file:
+        path: "/home/{{ item.name }}/.ssh"
+        owner: "{{ item.name }}"
+        mode: "0700"
+        state: directory
+      loop: "{{ users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: set ansible user id_ed25519 key
+      ansible.builtin.authorized_key:
+        user: "{{ item.name }}"
+        #key: "{{ lookup('file', item.ssh_key | default(lookup('env', 'HOME') + '/.ssh/id_ed25519.pub')) }}"
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Set ansible User to have passwordless sudo use
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+#    - name: Include libvirt playbook
+#      include_tasks: libvirt.yaml
+#
+#    - name: Include oh-my-zsh playbook
+#      include_tasks: oh-my-zsh.yaml
