@@ -1,4 +1,4 @@
-ansible-compat==2.2.0
+ansible-compat==2.2.7
 arrow==1.2.2
 attrs==22.1.0
 binaryornot==0.4.4
