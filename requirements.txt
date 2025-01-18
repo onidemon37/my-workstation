@@ -10,7 +10,7 @@ charset-normalizer==2.1.1
 click==8.1.8
 click-help-colors==0.9.4
 commonmark==0.9.1
-cookiecutter==2.1.1
+cookiecutter==2.6.0
 distlib==0.3.9
 enrich==1.2.7
 filelock==3.8.0
