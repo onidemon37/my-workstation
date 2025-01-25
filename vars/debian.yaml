@@ -8,6 +8,7 @@ dependency:
   - cmake
   - cmake-extras
   - curl
+  - expect
   - findutils
   - gawk
   - gettext
@@ -51,3 +52,17 @@ dependency:
   - virtualenvwrapper
   - wget
   - whois
+
+brew_packages:
+  - ansible-lint
+  - ansible-vault
+  - terraform
+  - helm
+  - go-task
+  - k9s
+  - kubectl
+  - kubectx
+  - kustomize
+  - minikube
+  - siderolabs/tap/talosctl
+  - vault

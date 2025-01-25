@@ -1,19 +1,4 @@
 ---
-- name: Include vars
-  include_vars:
-    dir: ../vars/
-    files_matching:
-      - debian.yaml
-      - sectigo.yaml
-
-- name: "Install base packages"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - "{{ dependency }}"
-    - "{{ extra_packages }}"
-
 - name: Create groups
   ansible.builtin.group:
     name: "{{ item }}"
@@ -60,5 +45,3 @@
         dest: /etc/sudoers
         line: "%wheel ALL=(ALL) NOPASSWD: ALL"
         validate: "visudo -cf %s"
-#    - name: Include libvirt playbook
-#      include_tasks: libvirt.yaml

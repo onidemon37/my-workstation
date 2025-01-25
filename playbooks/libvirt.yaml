@@ -1,41 +1,27 @@
 ---
-# playbook to install libvirt
-- hosts: workstation
-  remote_user: root
-  vars:
-    packages_libvirt:
-      - libvirt
-      - bridge-utils
-      - dnsmasq
-      - dmidecode
+- name: "Packages block"
+  block:
+    - name: "Remove packages"
+      community.general.pacman:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ packages_remove }}"
 
-    # using virt-manager as default
-    package_virt_manager:
-      - virt-manager
+    - name: "Include Config Management Task"
+      community.general.pacman:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - libvirt
+        - bridge-utils
+        - dnsmasq
+        - dmidecode
+        - virt-manager
 
-  tasks:
-    - name: "Packages block"
-      block:
-        - name: "Remove packages"
-          community.general.pacman:
-            name: "{{ item }}"
-            state: absent
-          with_items:
-            - "{{ packages_remove }}"
-
-        - name: "Include Config Management Task"
-          community.general.pacman:
-            name: "{{ item }}"
-            state: present
-          with_items:
-            - "{{ packages_libvirt }}"
-            - "{{ package_virt_manager }}"
-          when: _packages_libvirt == true
-
-        - name: "Systemctl services"
-          ansible.builtin.systemd:
-            name: "{{ item }}"
-            enabled: yes
-          with_items:
-            - libvirtd
-      when: packages_libvirt_install == true
+    - name: "Systemctl services"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: yes
+      with_items:
+        - libvirtd

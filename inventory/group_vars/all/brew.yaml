@@ -1,0 +1,11 @@
+---
+brew_packages:
+  - helm
+  - k9s
+  - go-task
+  - kubectl
+  - kubectx
+  - kustomize
+  - minikube
+  - siderolabs/tap/talosctl
+  - vault

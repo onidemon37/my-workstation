@@ -6,17 +6,30 @@
   gather_facts: true
   tasks:
     - name: Include Arch Linux playbook
+      ansible.builtin.include_tasks: playbooks/adding-users.yaml
+      when: ansible_distribution == "Archlinux"
+
+    - name: Include Arch Linux playbook
       ansible.builtin.include_tasks: playbooks/my-workstation-archlinux.yaml
+      when: ansible_distribution == "Archlinux"
+
+    - name: Include Arch Linux playbook
+      ansible.builtin.include_tasks: playbooks/install-yay.yaml
+      when: ansible_distribution == "Archlinux"
+
+    - name: Include Arch Linux playbook
+      ansible.builtin.include_tasks: playbooks/libvirt.yaml
       when: ansible_distribution == "Archlinux"
 
     - name: Include Debian playbook
       ansible.builtin.include_tasks: playbooks/my-workstation-debian.yaml
       when: ansible_distribution == "Debian"
 
-- import_playbook: ./playbooks/install-brew.yaml
-  when: ansible_distribution == "Debian"
-## Install oh-my-zsh
-##- import_playbook: ./playbooks/oh-my-zsh.yaml
+    - name: Include Debian playbook
+      ansible.builtin.include_tasks: playbooks/install-brew.yaml
+      when: ansible_distribution == "Debian"
 
-# install libvirt
-##- import_playbook: ./playbooks/libvirt.yaml
+# - import_playbook: ./playbooks/install-i3wm.yaml
+
+# Install oh-my-zsh
+- import_playbook: ./playbooks/oh-my-zsh.yaml

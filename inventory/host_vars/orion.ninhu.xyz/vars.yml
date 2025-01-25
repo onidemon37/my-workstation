@@ -29,29 +29,15 @@ zsh_plugins:
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
     dest: "zsh-autosuggestions"
 
-packages_gui_install: true
-display_manager: gdm
-packages_gui:
-  - xorg
-  - gnome
-  - gnome-extra
-  - gdm
-
-config_management_tools_install: true
-packages_config_management:
+packages_gui_install: false
+#display_manager: gdm
+#packages_gui:
+#  - xorg
+#  - gnome
+#  - gnome-extra
+#  - gdm
 
 yay_packages_install: true
-yay_packages:
-  - spotify
-  - joplin-appimage
-  - aur/lens-bin
-  - aur/go-task
-  - visual-studio-code-bin
-  - brave-bin
-  - discord
-
-pip_packages:
-  - pre-commit
+pip_packages: []
 
 packages_libvirt_install: true
-packages_libvirt:

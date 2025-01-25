@@ -3,12 +3,7 @@
 - name: "Install oh-my-zsh"
   hosts: all
   tags: ohmy
-  remote_user: "{{ workstation_user |default('root')}}"
-  vars:
-    dependency_packages:
-      - git
-      - wget
-      - zsh
+  remote_user: "{{ users[0].name |default('root')}}"
 
   tasks:
     - name: "oh-my-zsh config"
@@ -17,8 +12,10 @@
           ansible.builtin.package:
             name: "{{ item }}"
             state: present
-          with_items:
-            - "{{ dependency_packages }}"
+          loop:
+            - git
+            - wget
+            - zsh
 
         - name: Check if .zshrc exists
           ansible.builtin.stat:
@@ -27,13 +24,13 @@
 
         - name: "Check if .oh-my-zsh folder exist"
           ansible.builtin.stat:
-            path: ~/.oh-my-zsh
+            path: ~/.config/oh-my-zsh
           register: stat_oh_my_zsh
 
         - name: "Clone oh-my-zsh"
           ansible.builtin.git:
             repo: "https://github.com/ohmyzsh/ohmyzsh.git"
-            dest: "~/.oh-my-zsh"
+            dest: "~/.config/oh-my-zsh"
           when: not stat_oh_my_zsh.stat.exists
 
         - name: Creating new ~/.zshrc

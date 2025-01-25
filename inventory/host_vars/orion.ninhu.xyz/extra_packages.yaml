@@ -1,58 +1,60 @@
 ---
 extra_packages:
   - alacritty
-  #- filezilla
+  - filezilla
   - docker
   - docker-compose
-  #- chezmoi
-  #- thunderbird
+  - chezmoi
   - pwgen
-  #- aws-cli
   - keychain
   - btop
   - tmux
   - neovim
   - zsh
   - bat
-  #- terraform
-  #- kubectl
-  #- kubectx
-  #- kustomize
-  #- helm
-  #- sops
-  - jq
-  #- minikube
-  #- fluxctl
-  #- packer
-  - age
-  - vagrant
-  - ansible
-  #- molecule
-  - ansible-lint
-  #- molecule-vagrant
-  - yamllint
-  - python3-psycopg2
-  - python3-testinfra
-  - python3-netaddr
-  - python3-passlib
-  - python3-jmespath
 
-brew_packages:
-  - terraform
-  - helm
+yay_packages:
+  - aws-cli
+  - openlens-bin
   - go-task
+  - visual-studio-code-bin
+  - discord
+  - tflint
+  - terraform-docs-bin
   - k9s
+  - minikube
   - kubectl
   - kubectx
   - kustomize
-  - minikube
-  - siderolabs/tap/talosctl
+  - go-task
+  - helm
+  - sops
+  - jq
+  - ansible
+  - ansible-core
+  - fluxctl-bin
+  - yamllint
+  - ansible-lint
+  - vagrant
+  - age
+  - molecule
+  - extra/python-psycopg2
+  - extra/python-pytest-testinfra
+  - extra/python-netaddr
+  - extra/python-passlib
+  - extra/python-jmespath
+  - vault
+  - pre-commit
+
+brew_packages:
+  []
+  #- terraform
+  #- helm
+  #- go-task
+  #- k9s
+  #- kubectl
+  #- kubectx
+  #- kustomize
+  #- minikube
+  #- siderolabs/tap/talosctl
   # - vault
-# TASK [Install Homebrew packages "{{ item }}"] *******************************************************************************************
-# failed: [orion.ninhu.xyz] (item=['terraform', 'helm', 'k9s', 'kubectl',
-# 'kubectx', 'kustomize', 'minikube', 'siderolabs/tap/talosctl', 'vault'])
-# => {"ansible_loop_var": "item", "changed": false, "item": ["terraform",
-# "helm", "k9s", "kubectl", "kubectx", "kustomize", "minikube",
-# "siderolabs/tap/talosctl", "vault"], "msg": "Error: vault has been
-# disabled because it will change its license to BUSL on the next release!
-# It was disabled on 2024-09-27."}
